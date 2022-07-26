@@ -1,49 +1,54 @@
 import { useState } from "react";
 import { auth } from "../../firebase";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { sendSignInLinkToEmail } from "firebase/auth";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [email, setEmail] = useState("");
 
   const handleSubmit = async (e) => {
+    // console.log("ENV --->", process.env.REACT_APP_REGISTER_REDIRECT_URL);
     e.preventDefault();
-    const config = {
-      url: "https://localhost:3000/register/complete",
+    const actionCodeSettings = {
+      url: process.env.REACT_APP_REGISTER_REDIRECT_URL, //'http://localhost:3000/register/complete'
       handleCodeInApp: true,
     };
 
-    await auth.sendSignInLinkToEmail(email, config);
+    await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+
+    window.localStorage.setItem("emailForRegistration", email);
+
     toast.success(
-      `Se ha enviado un email a ${email}. Pinche en el link para completar su registro`
+      `Email is sent to ${email}. Click the link to complete your registration`
     );
-    // setting email in localStorage
-    window.localStorage.setItem("EmailForRegistration", email);
-    // clear state
+
     setEmail("");
   };
 
-  const registerForm = () => (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        className="form-control"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        autoFocus //active field by default
-      />
-      <button type="submit" className="btn btn-raised">
-        Register
-      </button>
-    </form>
-  );
+  const registerForm = () => {
+    return (
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          className="form-control"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          autoFocus
+        />
+
+        <button className="btn btn-light" type="submit">
+          Sign in
+        </button>
+      </form>
+    );
+  };
 
   return (
     <div className="container p-5">
       <div className="row">
         <div className="col-md-6 offset-md-3">
           <h4>Register</h4>
-          <ToastContainer />
+
           {registerForm()}
         </div>
       </div>
