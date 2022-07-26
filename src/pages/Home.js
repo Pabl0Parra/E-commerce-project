@@ -1,6 +1,6 @@
 const Home = () => (
   <div>
-    <p>react home</p>
+    <p>Home</p>
   </div>
 );
 
