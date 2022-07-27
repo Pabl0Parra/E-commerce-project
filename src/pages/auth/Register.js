@@ -36,7 +36,7 @@ const Register = () => {
           autoFocus
         />
         <br />
-        <button className="btn btn-light" type="submit">
+        <button className="btn btn-outline-secondary" type="submit">
           Sign in
         </button>
       </form>

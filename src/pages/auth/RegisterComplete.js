@@ -1,18 +1,60 @@
 import { useState, useEffect } from "react";
 import { auth } from "../../firebase";
-import { sendSignInLinkToEmail } from "firebase/auth";
+import { signInWithEmailLink, updatePassword } from "firebase/auth";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const RegisterComplete = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  useState(() => {
+  useEffect(() => {
     setEmail(window.localStorage.getItem("emailForRegistration"));
-  }, []);
+    // console.log(window.location.href);
+    // console.log(window.localStorage.getItem("emailForRegistration"));
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // validations
+    if (!email || !password) {
+      toast.error("Email & password are required");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters long");
+      return;
+    }
+
+    try {
+      // console.log("AUTH -->", auth);
+      const result = await signInWithEmailLink(
+        auth,
+        email,
+        window.location.href
+      );
+
+      if (result.user.emailVerified) {
+        // remove user email from localStorage
+        window.localStorage.removeItem("emailForRegistration");
+        // get user id token
+        let user = auth.currentUser;
+        await updatePassword(user, password);
+        const idTokenResult = await user.getIdTokenResult();
+        // redux store
+        console.log("user", user, "idToken", idTokenResult);
+        // redirect
+        console.log(navigate);
+        navigate("/");
+      }
+
+      // console.log("RESULT -->", result);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
   };
 
   const completeRegistrationForm = () => {
@@ -26,10 +68,9 @@ const RegisterComplete = ({ history }) => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Enter your password"
           autoFocus
-          disabled
         />
         <br />
-        <button className="btn btn-light" type="submit">
+        <button className="btn btn-outline-secondary" type="submit">
           Complete Registration
         </button>
       </form>
