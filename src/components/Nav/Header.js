@@ -1,12 +1,12 @@
 import { useState } from "react";
-import {
-  ShopOutlined,
-  HomeOutlined,
-  UserOutlined,
-  UserAddOutlined,
-  SettingOutlined,
-  HolderOutlined,
-} from "@ant-design/icons";
+// import {
+//   ShopOutlined,
+//   HomeOutlined,
+//   UserOutlined,
+//   UserAddOutlined,
+//   SettingOutlined,
+//   HolderOutlined,
+// } from "@ant-design/icons";
 // import { Menu } from "antd";
 
 // const items = [
@@ -150,8 +150,8 @@ const Header = () => {
                 key="home"
                 onClick={onClick}
                 setCurrent={[current]}
-                icon={<HomeOutlined />}
               >
+                {" "}
                 <a
                   className="nav-link btn-outline-danger rounded-pill px-3"
                   href="/"
