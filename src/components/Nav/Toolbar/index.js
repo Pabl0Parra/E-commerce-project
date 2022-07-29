@@ -9,8 +9,14 @@ const Toolbar = ({ className, drawerHandler }) => (
       <div className="toggle_button">
         <DrawerToggleButton click={drawerHandler} />
       </div>
-      <div className="toolbar_logo">
-        <a href="/">En Ascuas Forja</a>
+      <div className="toolbar_logo image-cropper">
+        <a href="/">
+          <img
+            className="nav-logo"
+            src={require("../../../assets/img/logo.webp")}
+            alt=""
+          />
+        </a>
       </div>
       <div className="spacer" />
       <div className="toolbar">
@@ -26,6 +32,9 @@ const Toolbar = ({ className, drawerHandler }) => (
           </li>
           <li>
             <NavLink to="/login">Sign in</NavLink>
+          </li>
+          <li>
+            <NavLink to="/login">Sign out</NavLink>
           </li>
           <li>
             <NavLink to="/register">Sign up</NavLink>
@@ -45,27 +54,49 @@ const StyledToolbar = styled(Toolbar)`
   left: 0;
   position: sticky;
   width: 100%;
-  height: 70px;
+  height: 90px;
   background: black;
   opacity:0.8;
+  font-size: 1.5rem;
   
+  .toolbar{
+    a{
+      margin-right:2.5rem;
+    }
+  }
   
   .toolbar_nav{
     display: flex;
     align-items: center;
     height: 100%;
-    padding: 0 1rem;
+    padding: 0 2rem;
+    margin-left: 2em;
   }
 
-  .toolbar_logo{
-    margin-left: 1rem;
+  // .toolbar_logo{
+  //   margin-left: rem;
 
     a{
-    color: white;
-    text-decoration: none;
-    font-size: 1.5rem;
+    color: white;   
     }
-   }
+  }
+  
+   .image-cropper {
+    
+    width: 60px;
+    height: 60px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+
+   .nav-logo{
+    display: inline;
+    margin: 0 auto;
+    margin-left: -15%; //centers the image
+    height: 100%;
+    width: auto;
+  }
    
   .spacer{
     flex: 1;
