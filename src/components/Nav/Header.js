@@ -1,50 +1,38 @@
-import { useState } from "react";
-import {
-  ShopOutlined,
-  HomeOutlined,
-  UserOutlined,
-  UserAddOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
-import { Menu } from "antd";
-import { Link } from "react-router-dom";
+import React from "react";
+import styled from "styled-components";
+import PropTypes from "prop-types";
+import Toolbar from "./Toolbar";
+import SideDrawer from "./SideDrawer";
+import Backdrop from "./Backdrop";
+import GlobalStyle from "../../theme/GlobalStyle";
 
-const { SubMenu, Item } = Menu;
+const Header = ({ className }) => {
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
 
-const Header = () => {
-  const [current, setCurrent] = useState("home");
+  const drawerOpenHandler = () => setDrawerOpen(!drawerOpen);
 
-  const handleClick = (e) => {
-    console.log(e.key);
-    setCurrent(e.key);
-  };
+  const backdropClickHandler = () => setDrawerOpen(false);
 
   return (
-    <Menu
-      onClick={handleClick}
-      selectedKeys={[current]}
-      mode="horizontal"
-      className="d-flex flex-row"
-    >
-      <Item key="home" icon={<HomeOutlined />}>
-        <Link to="/"> Home</Link>
-      </Item>
-      <Item key="shop" icon={<ShopOutlined />}>
-        <Link to="/shop"> Shop</Link>
-      </Item>
-
-      <Item key="register" icon={<UserAddOutlined />}>
-        <Link to="/register"> Register</Link>
-      </Item>
-      <Item key="login" icon={<UserOutlined />}>
-        <Link to="/login"> Login</Link>
-      </Item>
-      {/* <SubMenu icon={<SettingOutlined />} title="Dashboard">
-        <Item key="setting:1">Option 1</Item>
-        <Item key="setting:2">Option 2</Item>
-      </SubMenu> */}
-    </Menu>
+    <div className={className}>
+      <GlobalStyle />
+      <Toolbar drawerHandler={drawerOpenHandler} />
+      <SideDrawer show={drawerOpen} />
+      {drawerOpen && <Backdrop click={backdropClickHandler} />}
+      <main className="content"></main>
+    </div>
   );
 };
 
-export default Header;
+Header.propTypes = {
+  className: PropTypes.string,
+};
+
+const StyledHeader = styled(Header)`
+  .content {
+    margin-top: 64px;
+  }
+`;
+StyledHeader.displayName = "Header";
+
+export default StyledHeader;
